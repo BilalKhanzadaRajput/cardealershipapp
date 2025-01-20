@@ -1,0 +1,6 @@
+<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <path d="m0 0h24v24h-24z" fill="none" />
+    <path
+        d="m8.75 13.5a.75.75 0 0 1 0-1.5h10.5a.75.75 0 0 1 0 1.5zm-8-6a.75.75 0 1 1 0-1.5h18.5a.75.75 0 0 1 0 1.5zm0-6a.75.75 0 1 1 0-1.5h10.5a.75.75 0 1 1 0 1.5z"
+        fill="#fff" transform="translate(2 5)" />
+</svg>

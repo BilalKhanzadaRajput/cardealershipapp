@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "569494794475",
+    "project_id": "carshowroomapp-2997d",
+    "storage_bucket": "carshowroomapp-2997d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569494794475:android:29347e7750914e4d320eae",
+        "android_client_info": {
+          "package_name": "com.example.cardealershipapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsEMneW55T7HEFCClFLdshHxZjPhfjm7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
