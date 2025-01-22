@@ -10,4 +10,5 @@ class RoutesName {
   static const String JOB_POSTING_SCREEN = '/job_posting_screen';
   static const String GALLERY_SCREEN = '/gallery_screen';
   static const String PROFILE_SCREEN = '/profile_screen';
+  static const String ADD_CAR_SCREEN = '/add_car_screen';
 }

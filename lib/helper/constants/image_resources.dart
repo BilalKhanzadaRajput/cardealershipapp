@@ -2,10 +2,10 @@ class ImageResources {
   // = images
   static const String APP_LOGO_IMAGE = 'assets/images/app_logo.png';
   static const String PERSONS_ICON = 'assets/icons/person_icon.png';
-  static const String IMAGE_1 = 'assets/images/image_1.jpg';
-  static const String IMAGE_2 = 'assets/images/image_2.jpg';
-  static const String IMAGE_3 = 'assets/images/image_3.jpg';
-  static const String IMAGE_4 = 'assets/images/image_4.jpg';
+  static const String IMAGE_1 = 'assets/images/1.jpg';
+  static const String IMAGE_2 = 'assets/images/2.jpg';
+  static const String IMAGE_3 = 'assets/images/3.jpg';
+  static const String IMAGE_4 = 'assets/images/4.jpg';
 
   static const List<String> IMAGE_LIST = [
     IMAGE_1,

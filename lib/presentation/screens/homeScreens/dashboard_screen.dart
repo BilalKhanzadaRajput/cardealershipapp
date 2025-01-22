@@ -7,6 +7,8 @@ import 'package:cardealershipapp/businessLogic/bloc/DashboardScreenBloc/dashboar
 import 'package:cardealershipapp/presentation/routes/routes_name.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../helper/constants/colors_resource.dart';
 import '../../../helper/constants/dimensions_resource.dart';
@@ -152,85 +154,104 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       const SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
                       buildIndicator(state.activeIndex, state.images.length),
                       const SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                      // Add GridView here
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: Dimensions.PADDING_SIZE_SMALL,
-                          mainAxisSpacing: Dimensions.PADDING_SIZE_SMALL,
-                        ),
-                        itemCount: 4,
-                        // Number of items in GridView
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              switch (index) {
-                                case 0:
-                                  // Navigate to Videos Screen
-                                  Navigator.pushNamed(
-                                      context, RoutesName.GALLERY_SCREEN);
-                                  break;
-                                case 1:
-                                  // Navigate to Job Announcements Screen
-                                  Navigator.pushNamed(
-                                      context, RoutesName.JOB_POSTING_SCREEN);
-                                  break;
-                                case 2:
-                                  // Navigate to Search Screen
-                                  Navigator.pushNamed(
-                                      context, RoutesName.SEARCH_SCREEN);
-                                  break;
-                                case 3:
-                                  // Navigate to Complaints Screen
-                                  Navigator.pushNamed(
-                                      context, RoutesName.COMPLAINT_SCREEN);
-                                  break;
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: ColorResources.PRIMARY_COLOR,
-                                // Change color as needed
-                                borderRadius: BorderRadius.circular(8.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              alignment: Alignment.center,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    _getIconForIndex(index),
-                                    color: Colors.white,
-                                    size: 40.sp,
-                                  ),
-                                  const SizedBox(
-                                      height: Dimensions.PADDING_SIZE_SMALL),
-                                  Text(
-                                    _getTextForIndex(index),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
+                      // Add Car Listings
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('cars')
+                            .orderBy('createdAt', descending: true)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          }
+
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+
+                          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                            return const Center(child: Text('No cars available'));
+                          }
+
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              final carData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                              return Card(
+                                margin: EdgeInsets.only(bottom: 16.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (carData['photoUrls']?.isNotEmpty ?? false)
+                                      SizedBox(
+                                        height: 200.h,
+                                        child: PageView.builder(
+                                          itemCount: carData['photoUrls'].length,
+                                          itemBuilder: (context, photoIndex) {
+                                            return Image.network(
+                                              carData['photoUrls'][photoIndex],
+                                              fit: BoxFit.cover,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    Padding(
+                                      padding: EdgeInsets.all(16.h),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          Text(
+                                            'Price: Rs. ${carData['price']}',
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              color: ColorResources.PRIMARY_COLOR,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.speed, size: 16.sp),
+                                              SizedBox(width: 4.w),
+                                              Text('${carData['mileage']} km'),
+                                              SizedBox(width: 16.w),
+                                              Icon(Icons.settings, size: 16.sp),
+                                              SizedBox(width: 4.w),
+                                              Text(carData['transmission']),
+                                              SizedBox(width: 16.w),
+                                              Icon(Icons.local_gas_station, size: 16.sp),
+                                              SizedBox(width: 4.w),
+                                              Text(carData['fuelType']),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          Text(
+                                            'Showroom: ${carData['showroomName']}',
+                                            style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: Colors.grey[600],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  ],
+                                ),
+                              );
+                            },
                           );
                         },
-                      )
+                      ),
                     ],
                   ),
                 );
@@ -239,6 +260,23 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             },
           ),
         ),
+      ),
+      floatingActionButton: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser?.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data?.get('isShowroomOwner') == true) {
+            return FloatingActionButton(
+              onPressed: () => Navigator.pushNamed(context, RoutesName.ADD_CAR_SCREEN),
+              backgroundColor: ColorResources.PRIMARY_COLOR,
+              child: const Icon(Icons.add),
+              tooltip: 'Add Car',
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -280,66 +318,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   text: StringResources.PROFILE,
                   onTap: () => Navigator.pushNamed(context, RoutesName.PROFILE_SCREEN),
                 ),
-                buildDrawerItem(
-                  context,
-                  icon: Icons.feedback_outlined,
-                  text: StringResources.COMPLAINTS,
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.COMPLAINT_SCREEN),
-                ),
-                buildDrawerItem(
-                  context,
-                  icon: Icons.work_outline_outlined,
-                  text: StringResources.JOB_ANNOUCMENTS,
-                  onTap: () => Navigator.pushNamed(
-                      context, RoutesName.JOB_POSTING_SCREEN),
-                ),
-                buildDrawerItem(
-                  context,
-                  icon: Icons.video_camera_back_outlined,
-                  text: StringResources.VIDEOS_TITLE,
-                  onTap: () async {
-                    const url =
-                        'https://www.youtube.com/@SarwariJamaatPakistan';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      // Handle error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Launch failed due to an unknown error $url'),
-                          backgroundColor: ColorResources.ERROR_RED_COLOR,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                buildDrawerItem(
-                  context,
-                  icon: Icons.search_outlined,
-                  text: StringResources.SEARCH_TITLE,
-                  onTap: () =>
-                      Navigator.pushNamed(context, RoutesName.SEARCH_SCREEN),
-                ),
-                buildDrawerItem(
-                  context,
-                  icon: Icons.info_outline_rounded,
-                  text: StringResources.ABOUT_US,
-                  onTap: () async {
-                    const url = 'https://www.sarwarijamaat.pk/';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      // Handle error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Could not launch $url'),
-                          backgroundColor: ColorResources.ERROR_RED_COLOR,
-                        ),
-                      );
-                    }
-                  },
-                ),
+              
               ],
             ),
           ),

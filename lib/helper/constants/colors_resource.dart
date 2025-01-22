@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorResources {
-  static const Color PRIMARY_COLOR = Color(0xFF29B6F6);
+  static const Color PRIMARY_COLOR = Color(0xFFFF6D00);
   static Color BACKGROUND_COLOR = const Color(0xffF9F9F9);
   static Color WHITE_COLOR = const Color(0xffFFFFFF);
   static Color WHITE_HINT_COLOR = const Color(0xffFFFFFF).withOpacity(0.5);

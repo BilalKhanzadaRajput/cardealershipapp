@@ -77,15 +77,15 @@ class StringResources {
   static const String GALLERY_TITLE = 'Gallery';
   static const String ADD_COMPLAINT_TITLE = 'Add Complaint';
   static const String ENTER_YOUR_COMPLAINT = 'Enter your complaint';
-  static const String TEXT_1 = "Zulfiqar Ali Bhutto Visits of Makhdoom Family";
-  static const String TEXT_2 = "Benazir Bhutto Visit of HALA";
-  static const String TEXT_3 = "Zulfiqar Bhutto & Makhdoom Amin Faheem";
-  static const String TEXT_4 = "Shaheed Benazir Bhutto & Makhdoom Amin Faheem";
+  static const String TEXT_1 = "Cultus 2017";
+  static const String TEXT_2 = "Mehran 2012";
+  static const String TEXT_3 = "City 2024";
+  static const String TEXT_4 = "Mira 2023";
 
   static const List<String> BHUTTO_FAMILY_VISITS = [
-    "Zulfiqar Ali Bhutto Visits of Makhdoom Family",
-    "Benazir Bhutto Visit of HALA",
-    "Zulfiqar Bhutto & Makhdoom Amin Faheem",
-    "Shaheed Benazir Bhutto & Makhdoom Amin Faheem",
+    "City 2024",
+    "Mehran 2012",
+    "Cultus 2017",
+    "Mira 2023",
   ];
 }
