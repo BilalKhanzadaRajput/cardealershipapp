@@ -45,7 +45,7 @@ class CustomTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? Dimensions.D_60.h, // Use default height if not provided
+      height: height ?? Dimensions.D_80.h, // Use default height if not provided
       width: width ?? double.infinity, // Use default width if not provided
       decoration: BoxDecoration(
         boxShadow: [
@@ -93,7 +93,15 @@ class CustomTextFormField extends StatelessWidget {
             vertical: Dimensions.PADDING_SIZE_DEFAULT.h,
             horizontal: Dimensions.PADDING_SIZE_DEFAULT.w,
           ),
+          // Ensure error message doesn’t affect height
+          errorStyle: TextStyle(
+            fontSize: Dimensions.FONT_SIZE_SMALL.sp,
+            height: 1.1, // Adjust height to control spacing below input field
+          ),
+          errorMaxLines: 2, // Set a limit for error message lines
         ),
+
+
         obscureText: obscureText,
         onChanged: onChanged,
         validator: (value) {

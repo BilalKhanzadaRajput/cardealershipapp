@@ -141,17 +141,35 @@ class _LogInScreenState extends State<LogInScreen> {
                             padding: EdgeInsets.only(
                                 top: Dimensions.PADDING_SIZE_EXTRA_OVER_LARGE.h,
                                 bottom: Dimensions.PADDING_SIZE_SMALL.h),
-                            child: CustomElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context
-                                      .read<LoginScreenBloc>()
-                                      .add(LoginSubmit());
-                                }
-                              },
-                              text: StringResources.CONTINUE_BUTTON_TEXT,
+                            child: Column(
+                              children: [
+                                CustomElevatedButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.read<LoginScreenBloc>().add(LoginSubmit());
+                                    }
+                                  },
+                                  text: StringResources.CONTINUE_BUTTON_TEXT,
+                                ),
+                                SizedBox(height: Dimensions.PADDING_SIZE_DEFAULT.h), // Add spacing
+                                Align(
+                                  alignment: Alignment.topRight, // Center the signup text
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, RoutesName.SIGN_UP_SCREEN);
+                                    },
+                                    child: Text(
+                                      StringResources.DNOTHAVEANYACCOUNT_TEXT,
+                                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                        fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+
                           if (state.errorMessage != null)
                             Padding(
                               padding:
@@ -176,24 +194,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 ),
                               ),
                             ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, RoutesName.SIGN_UP_SCREEN);
-                              },
-                              child: Text(
-                                StringResources.SIGNUP_BUTTON_TEXT,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .displaySmall
-                                    ?.copyWith(
-                                        fontSize: Dimensions
-                                            .FONT_SIZE_EXTRA_SMALL.sp),
-                              ),
-                            ),
-                          )
+
                         ],
                       ),
                     ),

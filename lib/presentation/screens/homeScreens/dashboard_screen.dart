@@ -193,7 +193,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                             return Image.network(
                                               carData['photoUrls'][photoIndex],
                                               fit: BoxFit.cover,
+                                              errorBuilder: (context, error, stackTrace) {
+                                                return Image.asset('assets/images/signup_logo.png', fit: BoxFit.cover);
+                                              },
                                             );
+
                                           },
                                         ),
                                       ),

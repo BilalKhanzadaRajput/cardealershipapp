@@ -4,6 +4,8 @@ class StringResources {
   static const String PASSWORD_HINT = 'Password';
   static const String LOGIN_SUCCESS_MSG = 'Login Successful';
   static const String CONTINUE_BUTTON_TEXT = 'CONTINUE';
+  static const String DNOTHAVEANYACCOUNT_TEXT = "DON'T HAVE ANY ACCOUNT?";
+
   static const String UNDERLINED_FORGOT_PASSWORD = 'Forgot Password?';
   static const String FORGOT_PASSWORD_HEADING = 'Forgot Password';
   static const String UNDERLINED_SIGN_IN = 'Sign in';

@@ -10,7 +10,6 @@ import '../../../data/models/car_model.dart';
 class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   AddCarBloc() : super(const AddCarState()) {
     on<UpdateCarModel>((event, emit) {
@@ -117,4 +116,5 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
+
 }

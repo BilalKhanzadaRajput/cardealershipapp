@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             vertical: ScreenPercentage.SCREEN_SIZE_11.sw),
                         child: Image(
                           image:
-                              const AssetImage(ImageResources.APP_LOGO_IMAGE),
+                              const AssetImage(ImageResources.SIGNUP_LOGO_IMAGE),
                           width: Dimensions.D_200.w,
                         ),
                       ),
