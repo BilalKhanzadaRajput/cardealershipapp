@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data' as td;
+
 import 'package:flutter/material.dart';
 
 class CarDetailsScreen extends StatefulWidget {
@@ -14,7 +17,8 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.carData['carMake']} ${widget.carData['carModel']}'),
+        title:
+            Text('${widget.carData['carMake']} ${widget.carData['carModel']}'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,14 +29,16 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
               child: PageView.builder(
                 itemCount: widget.carData['photoUrls'].length,
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    widget.carData['photoUrls'][index],
+                  String imageData = widget.carData['photoUrls'][index];
+
+                  td.Uint8List imageBytes = base64Decode(imageData);
+                  print('Image Bytes: $imageBytes');
+                  return Image.memory(
+                    imageBytes,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/images/signup_logo.png',
-                        fit: BoxFit.cover,
-                      );
+                      print('Error: $error');
+                      return Text('=========> $error');
                     },
                   );
                 },
