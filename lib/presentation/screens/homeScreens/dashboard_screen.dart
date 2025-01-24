@@ -14,6 +14,7 @@ import '../../../helper/constants/colors_resource.dart';
 import '../../../helper/constants/dimensions_resource.dart';
 import '../../../helper/constants/image_resources.dart';
 import '../../../helper/constants/string_resources.dart';
+import '../../car_details_screen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
@@ -173,87 +174,109 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                             return const Center(child: Text('No cars available'));
                           }
 
-                          return ListView.builder(
+                          return GridView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // Number of items per row
+                              crossAxisSpacing: 16.w, // Horizontal spacing between grid items
+                              mainAxisSpacing: 16.h, // Vertical spacing between grid items
+                              childAspectRatio: 0.75, // Adjust this to control the aspect ratio of the grid items
+                            ),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               final carData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                              return Card(
-                                margin: EdgeInsets.only(bottom: 16.h),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (carData['photoUrls']?.isNotEmpty ?? false)
-                                      SizedBox(
-                                        height: 200.h,
-                                        child: PageView.builder(
-                                          itemCount: carData['photoUrls'].length,
-                                          itemBuilder: (context, photoIndex) {
-                                            return Image.network(
-                                              carData['photoUrls'][photoIndex],
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Image.asset('assets/images/signup_logo.png', fit: BoxFit.cover);
-                                              },
-                                            );
-
-                                          },
+                              return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CarDetailsScreen(carData: carData),
+                                      ),
+                                    );
+                                  },
+                              child:  Card(
+                                margin: EdgeInsets.zero, // Remove additional margin, as spacing is managed by the grid
+                                child: SingleChildScrollView(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      if (carData['photoUrls']?.isNotEmpty ?? false)
+                                        SizedBox(
+                                          height: 120.h, // Adjust height for grid view
+                                          child: PageView.builder(
+                                            itemCount: carData['photoUrls'].length,
+                                            itemBuilder: (context, photoIndex) {
+                                              return Image.network(
+                                                carData['photoUrls'][photoIndex],
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error, stackTrace) {
+                                                  return Image.asset(
+                                                    'assets/images/signup_logo.png',
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      Padding(
+                                        padding: EdgeInsets.all(8.h), // Adjust padding for grid view
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
+                                              style: TextStyle(
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis, // Ensure text fits within grid items
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Text(
+                                              'Price: Rs. ${carData['price']}',
+                                              style: TextStyle(
+                                                fontSize: 12.sp,
+                                                color: ColorResources.PRIMARY_COLOR,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.speed, size: 12.sp),
+                                                SizedBox(width: 4.w),
+                                                Text('${carData['mileage']} km', style: TextStyle(fontSize: 10.sp)),
+                                              ],
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.settings, size: 12.sp),
+                                                SizedBox(width: 4.w),
+                                                Text(carData['transmission'], style: TextStyle(fontSize: 10.sp)),
+                                              ],
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Row(
+                                              children: [
+                                                Icon(Icons.local_gas_station, size: 12.sp),
+                                                SizedBox(width: 4.w),
+                                                Text(carData['fuelType'], style: TextStyle(fontSize: 10.sp)),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    Padding(
-                                      padding: EdgeInsets.all(16.h),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
-                                            style: TextStyle(
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          Text(
-                                            'Price: Rs. ${carData['price']}',
-                                            style: TextStyle(
-                                              fontSize: 16.sp,
-                                              color: ColorResources.PRIMARY_COLOR,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          Row(
-                                            children: [
-                                              Icon(Icons.speed, size: 16.sp),
-                                              SizedBox(width: 4.w),
-                                              Text('${carData['mileage']} km'),
-                                              SizedBox(width: 16.w),
-                                              Icon(Icons.settings, size: 16.sp),
-                                              SizedBox(width: 4.w),
-                                              Text(carData['transmission']),
-                                              SizedBox(width: 16.w),
-                                              Icon(Icons.local_gas_station, size: 16.sp),
-                                              SizedBox(width: 4.w),
-                                              Text(carData['fuelType']),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          Text(
-                                            'Showroom: ${carData['showroomName']}',
-                                            style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: Colors.grey[600],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              );
+                              ));
                             },
                           );
+
                         },
                       ),
                     ],
