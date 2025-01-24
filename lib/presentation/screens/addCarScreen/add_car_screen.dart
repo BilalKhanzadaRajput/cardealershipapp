@@ -1,8 +1,11 @@
+import 'dart:convert';
+import 'dart:typed_data' as td;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../../businessLogic/bloc/addCarBloc/add_car_bloc.dart';
 import '../../../businessLogic/bloc/addCarBloc/add_car_event.dart';
 import '../../../businessLogic/bloc/addCarBloc/add_car_state.dart';
@@ -45,193 +48,203 @@ class _AddCarScreenState extends State<AddCarScreen> {
             body: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : SingleChildScrollView(
-              padding: EdgeInsets.all(16.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Car Model
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Car Model',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) =>
-                        context.read<AddCarBloc>().add(UpdateCarModel(value)),
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Car Make
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Car Make',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) =>
-                        context.read<AddCarBloc>().add(UpdateCarMake(value)),
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Year and Price
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Year',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) =>
-                              context.read<AddCarBloc>().add(UpdateYear(value)),
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                            labelText: 'Price',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          onChanged: (value) =>
-                              context.read<AddCarBloc>().add(UpdatePrice(value)),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Mileage
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Mileage',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.number,
-                    onChanged: (value) =>
-                        context.read<AddCarBloc>().add(UpdateMileage(value)),
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Transmission and Fuel Type
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: 'Transmission',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: ['Automatic', 'Manual']
-                              .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
-                              .toList(),
-                          onChanged: (value) => context
-                              .read<AddCarBloc>()
-                              .add(UpdateTransmission(value ?? '')),
-                        ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: 'Fuel Type',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: ['Petrol', 'Diesel', 'Hybrid', 'Electric']
-                              .map((e) => DropdownMenuItem(
-                            value: e,
-                            child: Text(e),
-                          ))
-                              .toList(),
-                          onChanged: (value) => context
-                              .read<AddCarBloc>()
-                              .add(UpdateFuelType(value ?? '')),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Description
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      border: OutlineInputBorder(),
-                    ),
-                    maxLines: 3,
-                    onChanged: (value) =>
-                        context.read<AddCarBloc>().add(UpdateDescription(value)),
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Add Photos
-                  ElevatedButton(
-                    onPressed: state.photoUrls.length < 4
-                        ? () => _pickImage(context)
-                        : null,
-                    child: Text('Add Photos (${state.photoUrls.length}/4)'),
-                  ),
-                  SizedBox(height: 16.h),
-
-                  // Display Images
-                  Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
-                    children: state.photoUrls
-                        .map((url) => Stack(
+                    padding: EdgeInsets.all(16.h),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Image.network(
-                          url,
-                          width: 100.w,
-                          height: 100.w,
-                          fit: BoxFit.cover,
+                        // Car Model
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Car Model',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) => context
+                              .read<AddCarBloc>()
+                              .add(UpdateCarModel(value)),
                         ),
-                        Positioned(
-                          right: 0,
-                          top: 0,
-                          child: IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: () => context
-                                .read<AddCarBloc>()
-                                .add(RemovePhoto(url)),
+                        SizedBox(height: 16.h),
+
+                        // Car Make
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Car Make',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) => context
+                              .read<AddCarBloc>()
+                              .add(UpdateCarMake(value)),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Year and Price
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Year',
+                                  border: OutlineInputBorder(),
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) => context
+                                    .read<AddCarBloc>()
+                                    .add(UpdateYear(value)),
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  labelText: 'Price',
+                                  border: OutlineInputBorder(),
+                                ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) => context
+                                    .read<AddCarBloc>()
+                                    .add(UpdatePrice(value)),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Mileage
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Mileage',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) => context
+                              .read<AddCarBloc>()
+                              .add(UpdateMileage(value)),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Transmission and Fuel Type
+                        Row(
+                          children: [
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  labelText: 'Transmission',
+                                  border: OutlineInputBorder(),
+                                ),
+                                items: ['Automatic', 'Manual']
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) => context
+                                    .read<AddCarBloc>()
+                                    .add(UpdateTransmission(value ?? '')),
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            Expanded(
+                              child: DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  labelText: 'Fuel Type',
+                                  border: OutlineInputBorder(),
+                                ),
+                                items:
+                                    ['Petrol', 'Diesel', 'Hybrid', 'Electric']
+                                        .map((e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e),
+                                            ))
+                                        .toList(),
+                                onChanged: (value) => context
+                                    .read<AddCarBloc>()
+                                    .add(UpdateFuelType(value ?? '')),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Description
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: 'Description',
+                            border: OutlineInputBorder(),
+                          ),
+                          maxLines: 3,
+                          onChanged: (value) => context
+                              .read<AddCarBloc>()
+                              .add(UpdateDescription(value)),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Add Photos
+                        ElevatedButton(
+                          onPressed: state.photoUrls.length < 4
+                              ? () => _pickImage(context)
+                              : null,
+                          child:
+                              Text('Add Photos (${state.photoUrls.length}/4)'),
+                        ),
+                        SizedBox(height: 16.h),
+
+                        // Display Images
+                        Wrap(
+                          spacing: 8.w,
+                          runSpacing: 8.h,
+                          children: state.photoUrls
+                              .map((url) => Stack(
+                                    children: [
+                                      Image.network(
+                                        url,
+                                        width: 100.w,
+                                        height: 100.w,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: IconButton(
+                                          icon: Icon(Icons.close),
+                                          onPressed: () => context
+                                              .read<AddCarBloc>()
+                                              .add(RemovePhoto(url)),
+                                        ),
+                                      ),
+                                    ],
+                                  ))
+                              .toList(),
+                        ),
+                        SizedBox(height: 24.h),
+
+                        // Submit Button
+                        ElevatedButton(
+                          onPressed: state.carModel.isNotEmpty &&
+                                  state.carMake.isNotEmpty &&
+                                  state.year.isNotEmpty &&
+                                  state.price.isNotEmpty &&
+                                  state.photoUrls.isNotEmpty &&
+                                  !state.isLoading
+                              ? () =>
+                                  context.read<AddCarBloc>().add(SubmitCar())
+                              : null,
+                          child: Text(
+                            'Add Car',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: ColorResources.PRIMARY_COLOR,
+                            padding: EdgeInsets.symmetric(vertical: 16.h),
                           ),
                         ),
                       ],
-                    ))
-                        .toList(),
-                  ),
-                  SizedBox(height: 24.h),
-
-                  // Submit Button
-                  ElevatedButton(
-                    onPressed: state.carModel.isNotEmpty &&
-                        state.carMake.isNotEmpty &&
-                        state.year.isNotEmpty &&
-                        state.price.isNotEmpty &&
-                        state.photoUrls.isNotEmpty &&
-                        !state.isLoading
-                        ? () => context.read<AddCarBloc>().add(SubmitCar())
-                        : null,
-                    child: Text(
-                      'Add Car',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorResources.PRIMARY_COLOR,
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
                     ),
                   ),
-                ],
-              ),
-            ),
           );
         },
       ),
     );
   }
+
   Future<void> _pickImage(BuildContext context) async {
     final XFile? pickedFile = await _imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -240,7 +253,8 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
     if (pickedFile != null) {
       // Assuming you have a method to generate or obtain a URL for the image.
-      final String imageUrl = pickedFile.path; // This can be a local file path or a URL.
+      final String imageUrl =
+          pickedFile.path; // This can be a local file path or a URL.
 
       // Add the photo URL to the state and optionally store it in Firestore
       context.read<AddCarBloc>().add(AddPhoto(imageUrl));
@@ -255,38 +269,51 @@ class _AddCarScreenState extends State<AddCarScreen> {
         context.read<AddCarBloc>().state.transmission,
         context.read<AddCarBloc>().state.fuelType,
         context.read<AddCarBloc>().state.description,
-        imageUrl,
+        context.read<AddCarBloc>().state.photoUrls,
       );
     }
   }
 
-
   Future<void> _storeCarDataInFirestore(
-      String carModel,
-      String carMake,
-      String year,
-      String price,
-      String mileage,
-      String transmission,
-      String fuelType,
-      String description,
-      String imageUrl, // The image URL is passed directly
-      ) async {
+    String carModel,
+    String carMake,
+    String year,
+    String price,
+    String mileage,
+    String transmission,
+    String fuelType,
+    String description,
+    List<String> imageUrl,
+  ) async {
     try {
-      final carData = {
-        'carModel': carModel,
-        'carMake': carMake,
-        'year': year,
-        'price': price,
-        'mileage': mileage,
-        'transmission': transmission,
-        'fuelType': fuelType,
-        'description': description,
-        'photoUrls': FieldValue.arrayUnion([imageUrl]), // Store the image URL directly
-      };
-
-      // Store the car data in the "cars" collection
-      await FirebaseFirestore.instance.collection('cars').add(carData);
+      print('url data $imageUrl');
+      // List<String> encodedImages = [];
+      //
+      // for (var url in imageUrl) {
+      //   td.Uint8List imageBytes = await File(url).readAsBytes();
+      //   String encodedImage = base64Encode(imageBytes);
+      //   encodedImages.add(encodedImage);
+      // }
+      // print('Encoded Images: $encodedImages');
+      //
+      // final carData = {
+      //   'carModel': carModel,
+      //   'carMake': carMake,
+      //   'year': year,
+      //   'price': price,
+      //   'mileage': mileage,
+      //   'transmission': transmission,
+      //   'fuelType': fuelType,
+      //   'description': description,
+      //   'photoUrls': encodedImages,
+      // };
+      //
+      // print('Base64 string length: ${encodedImages.join('').length}');
+      //
+      // print('carData: $carData');
+      //
+      // // Store the car data in the "cars" collection
+      // await FirebaseFirestore.instance.collection('cars').add(carData);
 
       // Optionally, show a success message or handle success logic.
     } catch (error) {
@@ -295,6 +322,13 @@ class _AddCarScreenState extends State<AddCarScreen> {
     }
   }
 
+  String encodeImage(td.Uint8List imageBytes) {
+    return base64Encode(imageBytes);
+  }
+
+  td.Uint8List decodeImage(String base64String) {
+    return base64Decode(base64String);
+  }
 
   Future<String> _uploadImageToFirebase(XFile image) async {
     // Simulating a delay for the image upload process.
@@ -308,5 +342,4 @@ class _AddCarScreenState extends State<AddCarScreen> {
 
     return fakeUrl;
   }
-
 }

@@ -1,10 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data' as td;
+
 import 'package:cardealershipapp/businessLogic/bloc/addCarBloc/add_car_event.dart';
 import 'package:cardealershipapp/businessLogic/bloc/addCarBloc/add_car_state.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../data/models/car_model.dart';
 
 class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
@@ -47,7 +50,8 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
     on<AddPhoto>((event, emit) {
       print('Adding photo URL: ${event.photoUrl}');
       if (state.photoUrls.length < 4) {
-        final List<String> updatedPhotos = List.from(state.photoUrls)..add(event.photoUrl);
+        final List<String> updatedPhotos = List.from(state.photoUrls)
+          ..add(event.photoUrl);
         emit(state.copyWith(photoUrls: updatedPhotos));
         print('Photo added successfully. Updated photo list: $updatedPhotos');
       } else {
@@ -56,7 +60,8 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
     });
     on<RemovePhoto>((event, emit) {
       print('Removing photo URL: ${event.photoUrl}');
-      final List<String> updatedPhotos = List.from(state.photoUrls)..remove(event.photoUrl);
+      final List<String> updatedPhotos = List.from(state.photoUrls)
+        ..remove(event.photoUrl);
       emit(state.copyWith(photoUrls: updatedPhotos));
       print('Photo removed successfully. Updated photo list: $updatedPhotos');
     });
@@ -77,7 +82,8 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       print('User document found.');
 
       final userData = userDoc.data()!;
-      if (!userData['isShowroomOwner']) throw Exception('User is not a showroom owner');
+      if (!userData['isShowroomOwner'])
+        throw Exception('User is not a showroom owner');
       print('User is a showroom owner.');
 
       // Validate required fields
@@ -85,9 +91,16 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       if (state.carMake.isEmpty) throw Exception('Car make is required');
       if (state.year.isEmpty) throw Exception('Year is required');
       if (state.price.isEmpty) throw Exception('Price is required');
-      if (state.photoUrls.isEmpty) throw Exception('At least one photo is required');
+      if (state.photoUrls.isEmpty)
+        throw Exception('At least one photo is required');
       print('All required fields validated.');
+      List<String> encodedImages = [];
 
+      for (var url in state.photoUrls) {
+        td.Uint8List imageBytes = await File(url).readAsBytes();
+        String encodedImage = base64Encode(imageBytes);
+        encodedImages.add(encodedImage);
+      }
       // Create car document
       final carRef = _firestore.collection('cars').doc();
       final car = CarModel(
@@ -101,7 +114,7 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
         mileage: state.mileage,
         transmission: state.transmission,
         fuelType: state.fuelType,
-        photoUrls: state.photoUrls,
+        photoUrls: encodedImages,
         description: state.description,
         createdAt: DateTime.now(),
       );
@@ -116,5 +129,4 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }
   }
-
 }

@@ -1,13 +1,14 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cardealershipapp/helper/constants/image_resources.dart';
 import 'package:cardealershipapp/helper/constants/string_resources.dart';
+import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 part 'dashboard_screen_event.dart';
 part 'dashboard_screen_state.dart';
 
-class DashBoardScreenBloc extends Bloc<DashBoardScreenEvent, DashBoardScreenState> {
+class DashBoardScreenBloc
+    extends Bloc<DashBoardScreenEvent, DashBoardScreenState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   DashBoardScreenBloc()
@@ -52,13 +53,13 @@ class DashBoardScreenBloc extends Bloc<DashBoardScreenEvent, DashBoardScreenStat
     }
   }
 
-
   Future<void> _onUpdateActiveIndex(
       UpdateActiveIndexEvent event, Emitter<DashBoardScreenState> emit) async {
     emit(state.copyWith(activeIndex: event.index));
   }
 
-  Future<void> _onLogOutUser(LogOutUser event, Emitter<DashBoardScreenState> emit) async {
+  Future<void> _onLogOutUser(
+      LogOutUser event, Emitter<DashBoardScreenState> emit) async {
     emit(state.copyWith(logOutUser: true));
     await _auth.signOut();
     emit(state.copyWith(logOutUser: false));

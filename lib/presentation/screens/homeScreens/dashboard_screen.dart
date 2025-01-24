@@ -1,14 +1,16 @@
+import 'dart:convert';
+import 'dart:typed_data' as td;
+
+import 'package:cardealershipapp/businessLogic/bloc/DashboardScreenBloc/dashboard_screen_bloc.dart';
+import 'package:cardealershipapp/presentation/routes/routes_name.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cardealershipapp/businessLogic/bloc/DashboardScreenBloc/dashboard_screen_bloc.dart';
-import 'package:cardealershipapp/presentation/routes/routes_name.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../helper/constants/colors_resource.dart';
 import '../../../helper/constants/dimensions_resource.dart';
@@ -162,15 +164,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
                           }
 
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
 
-                          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                            return const Center(child: Text('No cars available'));
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return const Center(
+                                child: Text('No cars available'));
                           }
 
                           return ListView.builder(
@@ -178,33 +185,47 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              final carData = snapshot.data!.docs[index].data() as Map<String, dynamic>;
+                              final carData = snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
                               return Card(
                                 margin: EdgeInsets.only(bottom: 16.h),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (carData['photoUrls']?.isNotEmpty ?? false)
+                                    if (carData['photoUrls']?.isNotEmpty ??
+                                        false)
                                       SizedBox(
                                         height: 200.h,
                                         child: PageView.builder(
-                                          itemCount: carData['photoUrls'].length,
+                                          itemCount:
+                                              carData['photoUrls'].length,
                                           itemBuilder: (context, photoIndex) {
-                                            return Image.network(
-                                              carData['photoUrls'][photoIndex],
+                                            print('Photo Index: $photoIndex');
+                                            String imageData =
+                                                carData['photoUrls']
+                                                    [photoIndex];
+                                            print('Image Data: $imageData');
+                                            td.Uint8List imageBytes =
+                                                base64Decode(imageData);
+                                            print('Image Bytes: $imageBytes');
+                                            return Image.memory(
+                                              imageBytes,
                                               fit: BoxFit.cover,
-                                              errorBuilder: (context, error, stackTrace) {
-                                                return Image.asset('assets/images/signup_logo.png', fit: BoxFit.cover);
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                print('Error: $error');
+                                                return Text(
+                                                    '=========> $error');
                                               },
                                             );
-
                                           },
                                         ),
                                       ),
                                     Padding(
                                       padding: EdgeInsets.all(16.h),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
@@ -218,7 +239,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                             'Price: Rs. ${carData['price']}',
                                             style: TextStyle(
                                               fontSize: 16.sp,
-                                              color: ColorResources.PRIMARY_COLOR,
+                                              color:
+                                                  ColorResources.PRIMARY_COLOR,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -233,7 +255,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                               SizedBox(width: 4.w),
                                               Text(carData['transmission']),
                                               SizedBox(width: 16.w),
-                                              Icon(Icons.local_gas_station, size: 16.sp),
+                                              Icon(Icons.local_gas_station,
+                                                  size: 16.sp),
                                               SizedBox(width: 4.w),
                                               Text(carData['fuelType']),
                                             ],
@@ -271,9 +294,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             .doc(FirebaseAuth.instance.currentUser?.uid)
             .snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data?.get('isShowroomOwner') == true) {
+          if (snapshot.hasData &&
+              snapshot.data?.get('isShowroomOwner') == true) {
             return FloatingActionButton(
-              onPressed: () => Navigator.pushNamed(context, RoutesName.ADD_CAR_SCREEN),
+              onPressed: () =>
+                  Navigator.pushNamed(context, RoutesName.ADD_CAR_SCREEN),
               backgroundColor: ColorResources.PRIMARY_COLOR,
               child: const Icon(Icons.add),
               tooltip: 'Add Car',
@@ -320,9 +345,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   context,
                   icon: Icons.person_outline,
                   text: StringResources.PROFILE,
-                  onTap: () => Navigator.pushNamed(context, RoutesName.PROFILE_SCREEN),
+                  onTap: () =>
+                      Navigator.pushNamed(context, RoutesName.PROFILE_SCREEN),
                 ),
-              
               ],
             ),
           ),
