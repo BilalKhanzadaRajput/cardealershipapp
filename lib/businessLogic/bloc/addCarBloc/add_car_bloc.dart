@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data' as td;
-
 import 'package:cardealershipapp/businessLogic/bloc/addCarBloc/add_car_event.dart';
 import 'package:cardealershipapp/businessLogic/bloc/addCarBloc/add_car_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../data/models/car_model.dart';
 
 class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
@@ -43,6 +41,15 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       print('Updating fuel type: ${event.fuelType}');
       emit(state.copyWith(fuelType: event.fuelType));
     });
+    on<UpdatePhoneNumber>((event, emit) {
+      print('Updating phone number: ${event.phoneNumber}');
+      emit(state.copyWith(phoneNumber: event.phoneNumber));
+    });
+    on<UpdateLocation>((event, emit) {
+      print('Updating location : ${event.location}');
+      emit(state.copyWith(location: event.location));
+    });
+
     on<UpdateDescription>((event, emit) {
       print('Updating description: ${event.description}');
       emit(state.copyWith(description: event.description));
@@ -91,6 +98,7 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
       if (state.carMake.isEmpty) throw Exception('Car make is required');
       if (state.year.isEmpty) throw Exception('Year is required');
       if (state.price.isEmpty) throw Exception('Price is required');
+      if (state.location.isEmpty) throw Exception('location is required');
       if (state.photoUrls.isEmpty)
         throw Exception('At least one photo is required');
       print('All required fields validated.');
@@ -101,13 +109,14 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
         String encodedImage = base64Encode(imageBytes);
         encodedImages.add(encodedImage);
       }
-      // Create car document
       final carRef = _firestore.collection('cars').doc();
       final car = CarModel(
         id: carRef.id,
+        location: state.location,
         showroomId: user.uid,
         showroomName: userData['showroomName'] ?? '',
         carModel: state.carModel,
+        phoneNumber:state.phoneNumber,
         carMake: state.carMake,
         year: state.year,
         price: state.price,
@@ -116,8 +125,14 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
         fuelType: state.fuelType,
         photoUrls: encodedImages,
         description: state.description,
+
         createdAt: DateTime.now(),
       );
+      if (state.phoneNumber.isEmpty) throw Exception('Phone number is required');
+      if (!RegExp(r'^\+?[1-9]\d{1,14}$').hasMatch(state.phoneNumber)) {
+        throw Exception('Invalid phone number format');
+      }
+
 
       print('Creating car document with ID: ${carRef.id}');
       await carRef.set(car.toMap());

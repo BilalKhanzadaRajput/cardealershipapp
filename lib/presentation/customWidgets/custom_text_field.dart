@@ -68,7 +68,9 @@ class CustomTextFormField extends StatelessWidget {
               ?.copyWith(fontSize: Dimensions.FONT_SIZE_DEFAULT.sp),
           filled: true,
           prefixIcon: Padding(
+
             padding: EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT.w),
+
             child: SvgPicture.asset(prefixIconSvgPath),
           ),
           suffixIcon: showSuffixIcon
@@ -86,7 +88,7 @@ class CustomTextFormField extends StatelessWidget {
               : null,
           fillColor: ColorResources.WHITE_COLOR,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT.r),
+            borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
             borderSide: BorderSide.none,
           ),
           contentPadding: EdgeInsets.symmetric(

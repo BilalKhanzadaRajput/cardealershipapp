@@ -28,7 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
         shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
           (_) {
             return RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimensions.RADIUS_5));
+                borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE));
           },
         ),
         textStyle: MaterialStateProperty.resolveWith(

@@ -55,6 +55,13 @@ class UpdateFuelType extends AddCarEvent {
   @override
   List<Object?> get props => [fuelType];
 }
+class UpdateLocation extends AddCarEvent {
+  final String location;
+  UpdateLocation(this.location);
+  @override
+  List<Object?> get props => [location];
+}
+
 
 class AddPhoto extends AddCarEvent {
   final String photoUrl;
@@ -62,6 +69,13 @@ class AddPhoto extends AddCarEvent {
   @override
   List<Object?> get props => [photoUrl];
 }
+class UpdatePhoneNumber extends AddCarEvent {
+  final String phoneNumber;
+  UpdatePhoneNumber(this.phoneNumber);
+  @override
+  List<Object?> get props => [phoneNumber];
+}
+
 
 class RemovePhoto extends AddCarEvent {
   final String photoUrl;

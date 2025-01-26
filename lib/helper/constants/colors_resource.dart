@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorResources {
-  static const Color PRIMARY_COLOR = Color(0xFFFF6D00);
+  static const Color PRIMARY_COLOR = Color(0xFFB71C1C);
   static Color BACKGROUND_COLOR = const Color(0xffF9F9F9);
   static Color WHITE_COLOR = const Color(0xffFFFFFF);
   static Color WHITE_HINT_COLOR = const Color(0xffFFFFFF).withOpacity(0.5);
@@ -17,5 +17,5 @@ class ColorResources {
   static const Color SHADOW_COLOR = Color(0xff455B6314);
   static const Color ORDER_CARD_SUBTITLE_COLOR = Color(0xFFAFAFAF);
   static const Color ERROR_RED_COLOR = Colors.red;
-  static const Color ACCENT_COLOR = Color(0xFF03DAC6); // Example accent color
+  static const Color ACCENT_COLOR = Color(0xFF03DAC6);
 }

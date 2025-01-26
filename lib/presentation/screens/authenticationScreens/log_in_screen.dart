@@ -67,21 +67,28 @@ class _LogInScreenState extends State<LogInScreen> {
               child: Column(
                 children: [
                   Container(
-                    color: ColorResources.PRIMARY_COLOR,
                     width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: ColorResources.PRIMARY_COLOR, // Define color inside BoxDecoration
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
+                        bottomRight: Radius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
+                      ),
+                    ),
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: ScreenPercentage.SCREEN_SIZE_11.sw),
+                            vertical: ScreenPercentage.SCREEN_SIZE_7.sw),
                         child: Image(
-                          image:
-                              const AssetImage(ImageResources.APP_LOGO_IMAGE),
+                          image: const AssetImage(ImageResources.APP_LOGO_IMAGE),
                           width: Dimensions.D_200.w,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: Dimensions.D_91.h),
+
+
+                  SizedBox(height: Dimensions.D_60.h),
                   Padding(
                     padding: EdgeInsets.symmetric(
                         horizontal: Dimensions.PADDING_SIZE_EXTRA_LARGE.w),

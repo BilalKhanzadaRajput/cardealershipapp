@@ -7,6 +7,9 @@ class AddCarState extends Equatable {
   final String year;
   final String price;
   final String mileage;
+  final String phoneNumber;
+  final String location;
+
   final String transmission;
   final String fuelType;
   final List<String> photoUrls;
@@ -19,6 +22,9 @@ class AddCarState extends Equatable {
     this.carModel = '',
     this.carMake = '',
     this.year = '',
+    this.phoneNumber = '',
+    this.location = '',
+
     this.price = '',
     this.mileage = '',
     this.transmission = '',
@@ -35,6 +41,9 @@ class AddCarState extends Equatable {
     String? carMake,
     String? year,
     String? price,
+    String? phoneNumber,
+    String? location,
+
     String? mileage,
     String? transmission,
     String? fuelType,
@@ -57,6 +66,9 @@ class AddCarState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,
       isSuccess: isSuccess ?? this.isSuccess,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      location: location ?? this.location,
+
     );
   }
 
@@ -74,5 +86,8 @@ class AddCarState extends Equatable {
         isLoading,
         errorMessage,
         isSuccess,
-      ];
-} 
+    phoneNumber,
+    location,
+
+  ];
+}

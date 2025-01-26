@@ -17,6 +17,11 @@ class Dimensions {
   static final double PADDING_SIZE_EXTRA_LARGE = 20.0;
   static final double SLIDER_HEIGHT = 200.0; // Example height for the slider
 
+  static const double LOGO_HEIGHT = 80.0; // Example height in dp
+  static const double LOGO_WIDTH = 80.0;  // Example width in dp
+
+
+
   static const double PADDING_SIZE_EXTRA_SMALL = 5.0;
   static const double PADDING_8 = 8.0;
   static const double PADDING_SIZE_SMALL = 10.0;

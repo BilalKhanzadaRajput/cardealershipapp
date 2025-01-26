@@ -15,6 +15,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../helper/constants/colors_resource.dart';
 import '../../../helper/constants/dimensions_resource.dart';
 import '../../../helper/constants/image_resources.dart';
+import '../../../helper/constants/screen_percentage.dart';
 import '../../../helper/constants/string_resources.dart';
 import '../../car_details_screen.dart';
 
@@ -34,6 +35,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: ColorResources.BACKGROUND_COLOR,
       appBar: AppBar(
@@ -114,17 +116,18 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           return CarouselSlider.builder(
                             itemCount: snapshot.data!.docs.length,
                             options: CarouselOptions(
-                              autoPlay: true,
+                              height: 200.h,
                               aspectRatio: 16 / 9,
                               enlargeCenterPage: true,
-                              initialPage: 0,
-                              enableInfiniteScroll: true,
-                              scrollDirection: Axis.horizontal,
-                              height: 200.h,
-                              scrollPhysics: const BouncingScrollPhysics(),
+                              autoPlay: snapshot.data!.docs.length > 1,
+                              enableInfiniteScroll:
+                              snapshot.data!.docs.length > 1,
                               autoPlayInterval: const Duration(seconds: 3),
                               autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
+                              const Duration(milliseconds: 800),
+                              scrollPhysics: snapshot.data!.docs.length > 1
+                                  ? const BouncingScrollPhysics()
+                                  : const NeverScrollableScrollPhysics(),
                             ),
                             itemBuilder: (BuildContext context, int index,
                                 int realIndex) {
@@ -167,10 +170,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                     alignment: Alignment.bottomLeft,
                                     child: Text(
                                       '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.bold,
+                                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                        fontSize: Dimensions.FONT_SIZE_LARGE.sp,
+                                        color: ColorResources.WHITE_COLOR,
                                       ),
                                     ),
                                   ),
@@ -277,7 +279,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                               ),
                                             ),
                                           Padding(
-                                            padding: EdgeInsets.all(8.h),
+                                            padding: EdgeInsets.all(5.h),
                                             // Adjust padding for grid view
                                             child: Column(
                                               crossAxisAlignment:
@@ -285,9 +287,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                               children: [
                                                 Text(
                                                   '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
-                                                  style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.bold,
+                                                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                                    fontSize: Dimensions.FONT_SIZE_MEDIUM.sp,
+                                                    color: ColorResources.BLACK_COLOR,
                                                   ),
                                                   maxLines: 1,
                                                   overflow: TextOverflow
@@ -296,11 +298,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                 SizedBox(height: 4.h),
                                                 Text(
                                                   'Price: Rs. ${carData['price']}',
-                                                  style: TextStyle(
-                                                    fontSize: 12.sp,
-                                                    color: ColorResources
-                                                        .PRIMARY_COLOR,
-                                                    fontWeight: FontWeight.w500,
+                                                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                                    fontSize: Dimensions.FONT_SIZE_SMALL.sp,
+                                                    color: ColorResources.BLACK_COLOR,
                                                   ),
                                                 ),
                                                 SizedBox(height: 4.h),
@@ -311,8 +311,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                     SizedBox(width: 4.w),
                                                     Text(
                                                         '${carData['mileage']} km',
-                                                        style: TextStyle(
-                                                            fontSize: 10.sp)),
+                                                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                                                        fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,
+                                                        color: ColorResources.BLACK_COLOR,
+                                                      ),),
                                                   ],
                                                 ),
                                                 SizedBox(height: 4.h),
@@ -386,20 +388,41 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       backgroundColor: ColorResources.PRIMARY_COLOR,
       child: Column(
         children: [
+          // App Logo
           Padding(
-            padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_SMALL.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.close, color: ColorResources.WHITE_COLOR),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+            padding: EdgeInsets.only(
+              top: Dimensions.PADDING_SIZE_EXTRA_LARGE.h,
+            ),
+            child: Center(
+             child:  Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: ScreenPercentage.SCREEN_SIZE_7.sw),
+                child: Image(
+                  image: const AssetImage(ImageResources.APP_LOGO_IMAGE),
+                  width: Dimensions.D_300.w,
+                  height: Dimensions.D_300.h,
                 ),
-              ],
+              ),
             ),
           ),
+
+          // // Close Icon Button
+          // Padding(
+          //   padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_SMALL.h),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       IconButton(
+          //         icon: Icon(Icons.close, color: ColorResources.WHITE_COLOR),
+          //         onPressed: () {
+          //           Navigator.pop(context);
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
+          // List of Drawer Items
           Expanded(
             child: ListView(
               padding: EdgeInsets.only(
@@ -422,6 +445,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               ],
             ),
           ),
+
+          // Logout Option
           Padding(
             padding: EdgeInsets.only(
                 left: Dimensions.PADDING_8.w,
@@ -439,9 +464,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 title: Text(
                   StringResources.LOG_OUT_TEXT,
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontSize: Dimensions.FONT_SIZE_LARGE.sp,
-                        color: ColorResources.WHITE_COLOR,
-                      ),
+                    fontSize: Dimensions.FONT_SIZE_LARGE.sp,
+                    color: ColorResources.WHITE_COLOR,
+                  ),
                 ),
               ),
             ),

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cardealershipapp/helper/constants/colors_resource.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../businessLogic/bloc/profileScreenBloc/profile_screen_event.dart';
+import '../../../helper/constants/dimensions_resource.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -37,11 +39,21 @@ class ProfileScreenContent extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Profile'),
-            backgroundColor: ColorResources.PRIMARY_COLOR,
+            title: Text(
+              'Add Car Details',
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                color: ColorResources.WHITE_COLOR,
+              ),
+            ),
             actions: [
               IconButton(
-                icon: Icon(state.isEditing ? Icons.save : Icons.edit),
+                icon: FaIcon(
+                  state.isEditing
+                      ? FontAwesomeIcons.floppyDisk // Save icon
+                      : FontAwesomeIcons.penToSquare, // Edit icon
+                  color: ColorResources.WHITE_COLOR,
+                ),
                 onPressed: () {
                   if (state.isEditing) {
                     context.read<ProfileScreenBloc>().add(SaveProfile());
@@ -51,87 +63,94 @@ class ProfileScreenContent extends StatelessWidget {
                 },
               ),
             ],
+            backgroundColor: ColorResources.PRIMARY_COLOR,
+            iconTheme: IconThemeData(color: ColorResources.WHITE_COLOR), // Set back icon color to white
+            centerTitle: true,
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
               : SingleChildScrollView(
-                  padding: EdgeInsets.all(16.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: const CircleAvatar(
-                          radius: 50,
-                          backgroundColor: ColorResources.PRIMARY_COLOR,
-                          child: Icon(Icons.person, size: 50, color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(height: 24.h),
-                      TextField(
-                        controller: TextEditingController(text: state.fullName),
-                        enabled: state.isEditing,
-                        decoration: InputDecoration(
-                          labelText: 'Full Name',
-                          prefixIcon: Icon(Icons.person),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) => context
-                            .read<ProfileScreenBloc>()
-                            .add(UpdateFullName(value)),
-                      ),
-                      SizedBox(height: 16.h),
-                      TextField(
-                        controller: TextEditingController(text: state.email),
-                        enabled: false,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          prefixIcon: Icon(Icons.email),
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      TextField(
-                        controller: TextEditingController(text: state.phoneNumber),
-                        enabled: state.isEditing,
-                        decoration: InputDecoration(
-                          labelText: 'Phone Number',
-                          prefixIcon: Icon(Icons.phone),
-                          border: OutlineInputBorder(),
-                        ),
-                        onChanged: (value) => context
-                            .read<ProfileScreenBloc>()
-                            .add(UpdatePhoneNumber(value)),
-                      ),
-                      if (state.isShowroomOwner) ...[
-                        SizedBox(height: 16.h),
-                        TextField(
-                          controller: TextEditingController(text: state.showroomName),
-                          enabled: state.isEditing,
-                          decoration: InputDecoration(
-                            labelText: 'Showroom Name',
-                            prefixIcon: Icon(Icons.store),
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) => context
-                              .read<ProfileScreenBloc>()
-                              .add(UpdateShowroomName(value)),
-                        ),
-                      ],
-                      if (state.errorMessage != null) ...[
-                        SizedBox(height: 16.h),
-                        Text(
-                          state.errorMessage!,
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ],
-                    ],
+            padding: EdgeInsets.all(16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: ColorResources.PRIMARY_COLOR,
+                    child: FaIcon(
+                      FontAwesomeIcons.user,
+                      size: 50,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
+                SizedBox(height: 24.h),
+                TextField(
+                  controller: TextEditingController(text: state.fullName),
+                  enabled: state.isEditing,
+                  decoration: InputDecoration(
+                    labelText: 'Full Name',
+                    prefixIcon: FaIcon(FontAwesomeIcons.user),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) => context
+                      .read<ProfileScreenBloc>()
+                      .add(UpdateFullName(value)),
+                ),
+                SizedBox(height: 16.h),
+                TextField(
+                  controller: TextEditingController(text: state.email),
+                  enabled: false,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: FaIcon(FontAwesomeIcons.envelope),
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                TextField(
+                  controller: TextEditingController(text: state.phoneNumber),
+                  enabled: state.isEditing,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    prefixIcon: FaIcon(FontAwesomeIcons.phone),
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) => context
+                      .read<ProfileScreenBloc>()
+                      .add(UpdatePhoneNumber(value)),
+                ),
+                if (state.isShowroomOwner) ...[
+                  SizedBox(height: 16.h),
+                  TextField(
+                    controller: TextEditingController(text: state.showroomName),
+                    enabled: state.isEditing,
+                    decoration: InputDecoration(
+                      labelText: 'Showroom Name',
+                      prefixIcon: FaIcon(FontAwesomeIcons.store),
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => context
+                        .read<ProfileScreenBloc>()
+                        .add(UpdateShowroomName(value)),
+                  ),
+                ],
+                if (state.errorMessage != null) ...[
+                  SizedBox(height: 16.h),
+                  Text(
+                    state.errorMessage!,
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         );
       },
     );
   }
-} 
+}

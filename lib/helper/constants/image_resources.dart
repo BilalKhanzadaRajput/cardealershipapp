@@ -24,6 +24,8 @@ class ImageResources {
   static const String IONIC_EYE_ICON = 'assets/icons/ionic_eyes_icon.svg';
   static const String PHONE_ICON = 'assets/icons/phone_icon.svg';
   static const String USER_ICON = 'assets/icons/user_icon.svg';
+  static const String STORE_ICON = 'assets/icons/store_logo_extramini.svg';
+
   static const String DISTRICT_ICON = 'assets/icons/district_icon.svg';
   static const String COMPLAINT_ICON = 'assets/icons/complaint_icon.svg';
 }

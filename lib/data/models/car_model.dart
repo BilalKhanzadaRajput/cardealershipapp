@@ -6,8 +6,10 @@ class CarModel {
   final String carMake;
   final String year;
   final String price;
+  final String location;
   final String mileage;
   final String transmission;
+  final String phoneNumber;
   final String fuelType;
   final List<String> photoUrls;
   final String description;
@@ -15,6 +17,7 @@ class CarModel {
 
   CarModel({
     required this.id,
+    required this.location,
     required this.showroomId,
     required this.showroomName,
     required this.carModel,
@@ -23,6 +26,7 @@ class CarModel {
     required this.price,
     required this.mileage,
     required this.transmission,
+    required this.phoneNumber,
     required this.fuelType,
     required this.photoUrls,
     required this.description,
@@ -33,6 +37,7 @@ class CarModel {
     return {
       'id': id,
       'showroomId': showroomId,
+      'location' : location,
       'showroomName': showroomName,
       'carModel': carModel,
       'carMake': carMake,
@@ -40,6 +45,7 @@ class CarModel {
       'price': price,
       'mileage': mileage,
       'transmission': transmission,
+      'phoneNumber': phoneNumber,
       'fuelType': fuelType,
       'photoUrls': photoUrls,
       'description': description,
@@ -50,6 +56,7 @@ class CarModel {
   factory CarModel.fromMap(Map<String, dynamic> map) {
     return CarModel(
       id: map['id'] ?? '',
+      location: map['location'] ?? '',
       showroomId: map['showroomId'] ?? '',
       showroomName: map['showroomName'] ?? '',
       carModel: map['carModel'] ?? '',
@@ -58,10 +65,11 @@ class CarModel {
       price: map['price'] ?? '',
       mileage: map['mileage'] ?? '',
       transmission: map['transmission'] ?? '',
+      phoneNumber: map['phoneNumber'] ?? '',
       fuelType: map['fuelType'] ?? '',
       photoUrls: List<String>.from(map['photoUrls'] ?? []),
       description: map['description'] ?? '',
       createdAt: DateTime.parse(map['createdAt']),
     );
   }
-} 
+}
