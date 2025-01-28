@@ -12,7 +12,7 @@ class ThemeClass {
         .copyWith(primary: ThemeClass.lightPrimaryColor),
     textTheme: TextTheme(
       headlineLarge: TextStyle(
-          color: ColorResources.PRIMARY_COLOR,
+          color: ColorResources.BLACK_COLOR,
           fontFamily: GoogleFonts.poppins().fontFamily,
           fontWeight: FontWeight.w400),
       displaySmall: TextStyle(

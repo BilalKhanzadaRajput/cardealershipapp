@@ -25,6 +25,16 @@ class ImageResources {
   static const String PHONE_ICON = 'assets/icons/phone_icon.svg';
   static const String USER_ICON = 'assets/icons/user_icon.svg';
   static const String STORE_ICON = 'assets/icons/store_logo_extramini.svg';
+  static const String PRICE_ICON = 'assets/icons/price_logo.svg';
+  static const String LOCATION_ICON = 'assets/icons/location_logo.svg';
+  static const String DESCRIPTION_ICON = 'assets/icons/description_logo.svg';
+  static const String CALENDER_ICON = 'assets/icons/calender_logo.svg';
+  static const String CAR_ICON = 'assets/icons/car_logo.svg';
+  static const String MILAGE_ICON = 'assets/icons/milage_logo.svg';
+  static const String FEATURES_ICON = 'assets/icons/features_icon.svg';
+
+
+
 
   static const String DISTRICT_ICON = 'assets/icons/district_icon.svg';
   static const String COMPLAINT_ICON = 'assets/icons/complaint_icon.svg';

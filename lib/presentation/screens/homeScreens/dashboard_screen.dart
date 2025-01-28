@@ -6,6 +6,7 @@ import 'package:cardealershipapp/presentation/routes/routes_name.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,7 @@ import '../../../helper/constants/dimensions_resource.dart';
 import '../../../helper/constants/image_resources.dart';
 import '../../../helper/constants/screen_percentage.dart';
 import '../../../helper/constants/string_resources.dart';
-import '../../car_details_screen.dart';
+import '../carDetailsScreen/car_details_screen.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
@@ -254,23 +255,31 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                     carData['photoUrls'].length,
                                                 itemBuilder:
                                                     (context, photoIndex) {
-                                                  print(
+                                                  if (kDebugMode) {
+                                                    print(
                                                       'Photo Index: $photoIndex');
+                                                  }
                                                   String imageData =
                                                       carData['photoUrls']
                                                           [photoIndex];
-                                                  print(
+                                                  if (kDebugMode) {
+                                                    print(
                                                       'Image Data: $imageData');
+                                                  }
                                                   td.Uint8List imageBytes =
                                                       base64Decode(imageData);
-                                                  print(
+                                                  if (kDebugMode) {
+                                                    print(
                                                       'Image Bytes: $imageBytes');
+                                                  }
                                                   return Image.memory(
                                                     imageBytes,
                                                     fit: BoxFit.cover,
                                                     errorBuilder: (context,
                                                         error, stackTrace) {
-                                                      print('Error: $error');
+                                                      if (kDebugMode) {
+                                                        print('Error: $error');
+                                                      }
                                                       return Text(
                                                           '=========> $error');
                                                     },
@@ -300,7 +309,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                   'Price: Rs. ${carData['price']}',
                                                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                                     fontSize: Dimensions.FONT_SIZE_SMALL.sp,
-                                                    color: ColorResources.BLACK_COLOR,
+                                                    color: ColorResources.PRIMARY_COLOR,
                                                   ),
                                                 ),
                                                 SizedBox(height: 4.h),
@@ -329,18 +338,18 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                             fontSize: 10.sp)),
                                                   ],
                                                 ),
-                                                SizedBox(height: 4.h),
-                                                Row(
-                                                  children: [
-                                                    Icon(
-                                                        Icons.local_gas_station,
-                                                        size: 12.sp),
-                                                    SizedBox(width: 4.w),
-                                                    Text(carData['fuelType'],
-                                                        style: TextStyle(
-                                                            fontSize: 10.sp)),
-                                                  ],
-                                                ),
+                                                // SizedBox(height: 4.h),
+                                                // Row(
+                                                //   children: [
+                                                //     Icon(
+                                                //         Icons.local_gas_station,
+                                                //         size: 12.sp),
+                                                //     SizedBox(width: 4.w),
+                                                //     Text(carData['fuelType'],
+                                                //         style: TextStyle(
+                                                //             fontSize: 10.sp)),
+                                                //   ],
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -399,8 +408,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     vertical: ScreenPercentage.SCREEN_SIZE_7.sw),
                 child: Image(
                   image: const AssetImage(ImageResources.APP_LOGO_IMAGE),
-                  width: Dimensions.D_300.w,
-                  height: Dimensions.D_300.h,
+                  width: Dimensions.D_200.w,
+                  height: Dimensions.D_200.h,
                 ),
               ),
             ),
@@ -441,6 +450,22 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   text: StringResources.PROFILE,
                   onTap: () =>
                       Navigator.pushNamed(context, RoutesName.PROFILE_SCREEN),
+                ),
+                buildDrawerItem(
+                  context,
+                  icon: Icons.article_outlined,  // Blog Icon
+                  text: 'Blog',  // Text for the Blog section
+                  onTap: () => Navigator.pushNamed(context, RoutesName.BLOG_SCREEN),  // Navigate to Blog screen
+                ),      buildDrawerItem(
+                  context,
+                  icon: Icons.info_outline_rounded,  // Blog Icon
+                  text: 'FAQS',  // Text for the Blog section
+                  onTap: () => Navigator.pushNamed(context, RoutesName.FAQS_SCREEN),  // Navigate to Blog screen
+                ),   buildDrawerItem(
+                  context,
+                  icon: Icons.support_outlined,  // Blog Icon
+                  text: 'Support',  // Text for the Blog section
+                  onTap: () => Navigator.pushNamed(context, RoutesName.SUPPORT_SCEEN),  // Navigate to Blog screen
                 ),
               ],
             ),

@@ -11,4 +11,8 @@ class RoutesName {
   static const String GALLERY_SCREEN = '/gallery_screen';
   static const String PROFILE_SCREEN = '/profile_screen';
   static const String ADD_CAR_SCREEN = '/add_car_screen';
+  static const String BLOG_SCREEN = '/blog_screen';
+  static const String FAQS_SCREEN = '/faqs_screen';
+  static const String SUPPORT_SCEEN = '/support_screen';
+
 }

@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data' as td;
+import 'package:cardealershipapp/helper/extension/strings_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +10,9 @@ import '../../../businessLogic/bloc/addCarBloc/add_car_event.dart';
 import '../../../businessLogic/bloc/addCarBloc/add_car_state.dart';
 import '../../../helper/constants/colors_resource.dart';
 import '../../../helper/constants/dimensions_resource.dart';
+import '../../../helper/constants/image_resources.dart';
+import '../../../helper/constants/string_resources.dart';
+import '../../customWidgets/custom_text_field.dart';
 
 class AddCarScreen extends StatefulWidget {
   const AddCarScreen({Key? key}) : super(key: key);
@@ -42,14 +45,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              title:  Text('Add Car Details',
-              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-            fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
-            color: ColorResources.WHITE_COLOR,
-          ),),
+              title: Text(
+                'Add Car Details',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                  color: ColorResources.WHITE_COLOR,
+                ),
+              ),
               backgroundColor: ColorResources.PRIMARY_COLOR,
-              iconTheme: IconThemeData(color: ColorResources.WHITE_COLOR), // Set the back icon color to white
-
+              iconTheme: IconThemeData(color: ColorResources.WHITE_COLOR),
               centerTitle: true,
             ),
             body: state.isLoading
@@ -60,20 +64,22 @@ class _AddCarScreenState extends State<AddCarScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Car Model
-                  buildTextField(
-                    label: 'Car Model',
+                  CustomTextFormField(
+                    hintText: 'Car Model',
                     onChanged: (value) => context
                         .read<AddCarBloc>()
                         .add(UpdateCarModel(value)),
+                    prefixIconSvgPath: ImageResources.CAR_ICON,
                   ),
                   SizedBox(height: 16.h),
 
                   // Car Make
-                  buildTextField(
-                    label: 'Car Make',
+                  CustomTextFormField(
+                    hintText: 'Car Make',
                     onChanged: (value) => context
                         .read<AddCarBloc>()
                         .add(UpdateCarMake(value)),
+                    prefixIconSvgPath: ImageResources.CAR_ICON,
                   ),
                   SizedBox(height: 16.h),
 
@@ -81,22 +87,24 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: buildTextField(
-                          label: 'Year',
+                        child: CustomTextFormField(
+                          hintText: 'Year',
                           keyboardType: TextInputType.number,
                           onChanged: (value) => context
                               .read<AddCarBloc>()
                               .add(UpdateYear(value)),
+                          prefixIconSvgPath: ImageResources.CALENDER_ICON,
                         ),
                       ),
                       SizedBox(width: 16.w),
                       Expanded(
-                        child: buildTextField(
-                          label: 'Price',
+                        child: CustomTextFormField(
+                          hintText: 'Price',
                           keyboardType: TextInputType.number,
                           onChanged: (value) => context
                               .read<AddCarBloc>()
                               .add(UpdatePrice(value)),
+                          prefixIconSvgPath: ImageResources.PRICE_ICON,
                         ),
                       ),
                     ],
@@ -104,21 +112,21 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   SizedBox(height: 16.h),
 
                   // Mileage
-                  buildTextField(
-                    label: 'Mileage',
+                  CustomTextFormField(
+                    hintText: 'Mileage',
                     keyboardType: TextInputType.number,
                     onChanged: (value) => context
                         .read<AddCarBloc>()
                         .add(UpdateMileage(value)),
+                    prefixIconSvgPath: ImageResources.MILAGE_ICON,
                   ),
-
                   SizedBox(height: 16.h),
 
                   // Transmission and Fuel Type
                   Row(
                     children: [
                       Expanded(
-                        child: buildDropdown(
+                        child: _buildDropdown(
                           label: 'Transmission',
                           items: ['Automatic', 'Manual'],
                           onChanged: (value) => context
@@ -128,7 +136,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                       ),
                       SizedBox(width: 16.w),
                       Expanded(
-                        child: buildDropdown(
+                        child: _buildDropdown(
                           label: 'Fuel Type',
                           items: ['Petrol', 'Diesel', 'Hybrid', 'Electric'],
                           onChanged: (value) => context
@@ -141,37 +149,39 @@ class _AddCarScreenState extends State<AddCarScreen> {
                   SizedBox(height: 16.h),
 
                   // Phone Number
-                  buildTextFieldForNumber(
-                    label: 'Phone Number',
+                  CustomTextFormField(
+                    hintText: StringResources.PHONE_HINT,
+                    onChanged: (value) => context
+                        .read<AddCarBloc>()
+                        .add(UpdatePhoneNumber(value)),
+                    validator: (value) =>
+                        value.validatePhoneNumber(value),
+                    prefixIconSvgPath: ImageResources.PHONE_ICON,
                     keyboardType: TextInputType.phone,
-                    onChanged: (value) {
-                      if (value.startsWith('+92')) {
-                        context.read<AddCarBloc>().add(UpdatePhoneNumber(value));
-                      }
-                    },
-                    hintText: 'Enter phone number with +92',
-                    errorText: state.phoneNumber.isNotEmpty && !state.phoneNumber.startsWith('+92')
-                        ? 'Phone number must start with +92'
-                        : null,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(11),
+                    ],
                   ),
-
                   SizedBox(height: 16.h),
-                  //location
-                  buildTextField(
-                    label: 'Location',
+
+                  // Location
+                  CustomTextFormField(
+                    hintText: 'Location',
                     onChanged: (value) => context
                         .read<AddCarBloc>()
                         .add(UpdateLocation(value)),
+                    prefixIconSvgPath: ImageResources.LOCATION_ICON,
                   ),
                   SizedBox(height: 16.h),
 
                   // Description
-                  buildTextField(
-                    label: 'Description',
+                  CustomTextFormField(
+                    hintText: 'Description',
                     maxLines: 3,
                     onChanged: (value) => context
                         .read<AddCarBloc>()
                         .add(UpdateDescription(value)),
+                    prefixIconSvgPath: ImageResources.DESCRIPTION_ICON,
                   ),
                   SizedBox(height: 16.h),
 
@@ -180,17 +190,27 @@ class _AddCarScreenState extends State<AddCarScreen> {
                     onPressed: state.photoUrls.length < 4
                         ? () => _pickImage(context)
                         : null,
-                    child: Text(
-                      'Add Photos (${state.photoUrls.length}/4)',
-                      style: const TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorResources.PRIMARY_COLOR,
                     ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center, // Centers the content
+                      children: [
+                        Icon(
+                          Icons.camera_alt, // Camera icon
+                          color: Colors.white,
+                        ),
+                        SizedBox(width: 8), // Space between the icon and text
+                        Text(
+                          'Add Photos (${state.photoUrls.length}/4)',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
+
                   SizedBox(height: 16.h),
 
-                  // Display Images
                   // Display Images
                   Wrap(
                     spacing: 8.w,
@@ -199,7 +219,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         .map((url) => Stack(
                       children: [
                         Image.file(
-                          File(url), // Use Image.file for local image paths
+                          File(url),
                           width: 100.w,
                           height: 100.w,
                           fit: BoxFit.cover,
@@ -212,15 +232,15 @@ class _AddCarScreenState extends State<AddCarScreen> {
                               Icons.close,
                               color: Colors.red,
                             ),
-                            onPressed: () =>
-                                context.read<AddCarBloc>().add(RemovePhoto(url)),
+                            onPressed: () => context
+                                .read<AddCarBloc>()
+                                .add(RemovePhoto(url)),
                           ),
                         ),
                       ],
                     ))
                         .toList(),
                   ),
-
                   SizedBox(height: 24.h),
 
                   // Submit Button
@@ -233,8 +253,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
                         state.phoneNumber.isNotEmpty &&
                         state.photoUrls.isNotEmpty &&
                         !state.isLoading
-                        ? () =>
-                        context.read<AddCarBloc>().add(SubmitCar())
+                        ? () => context
+                        .read<AddCarBloc>()
+                        .add(SubmitCar())
                         : null,
                     child: const Text(
                       'Add Car',
@@ -254,28 +275,7 @@ class _AddCarScreenState extends State<AddCarScreen> {
     );
   }
 
-  Widget buildTextField({
-    required String label,
-    TextInputType? keyboardType,
-    int maxLines = 1,
-    required Function(String) onChanged,
-  }) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: label,
-
-        border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
-
-    ),
-      ),
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      onChanged: onChanged,
-    );
-  }
-
-  Widget buildDropdown({
+  Widget _buildDropdown({
     required String label,
     required List<String> items,
     required Function(String?) onChanged,
@@ -283,11 +283,9 @@ class _AddCarScreenState extends State<AddCarScreen> {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         labelText: label,
-
         border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
-
-    ),
+          borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
+        ),
       ),
       items: items
           .map((e) => DropdownMenuItem(
@@ -310,27 +308,4 @@ class _AddCarScreenState extends State<AddCarScreen> {
       context.read<AddCarBloc>().add(AddPhoto(imageUrl));
     }
   }
-  Widget buildTextFieldForNumber({
-    required String label,
-    TextInputType? keyboardType,
-    int maxLines = 1,
-    required Function(String) onChanged,
-    String? hintText,
-    String? errorText,
-  }) {
-    return TextField(
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hintText,
-        errorText: errorText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(Dimensions.RADIUS_EXTRA_LARGE.r),
-        ),
-      ),
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      onChanged: onChanged,
-    );
-  }
-
 }

@@ -1,3 +1,6 @@
+import 'package:cardealershipapp/presentation/screens/blogScreen/blog_screen.dart';
+import 'package:cardealershipapp/presentation/screens/faqScreen/faq_screen.dart';
+import 'package:cardealershipapp/presentation/screens/supportScreen/support_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cardealershipapp/businessLogic/bloc/DashboardScreenBloc/dashboard_screen_bloc.dart';
@@ -49,6 +52,15 @@ class Routes {
       case RoutesName.ADD_CAR_SCREEN:
         return MaterialPageRoute(
           builder: (BuildContext context) => const AddCarScreen(),
+        );  case RoutesName.BLOG_SCREEN:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const BlogScreen(),
+        ); case RoutesName.FAQS_SCREEN:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const FAQScreen(),
+        ); case RoutesName.SUPPORT_SCEEN:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const SupportScreen(),
         );
     }
     return null;

@@ -168,7 +168,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     child: Text(
                                       StringResources.DNOTHAVEANYACCOUNT_TEXT,
                                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                        fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,
+                                        fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,color: ColorResources.BLACK_COLOR
                                       ),
                                     ),
                                   ),

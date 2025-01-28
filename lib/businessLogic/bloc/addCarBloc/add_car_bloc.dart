@@ -6,7 +6,7 @@ import 'package:cardealershipapp/businessLogic/bloc/addCarBloc/add_car_state.dar
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/models/car_model.dart';
+import '../../../dataProvider/models/car_model.dart';
 
 class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -128,10 +128,7 @@ class AddCarBloc extends Bloc<AddCarEvent, AddCarState> {
 
         createdAt: DateTime.now(),
       );
-      if (state.phoneNumber.isEmpty) throw Exception('Phone number is required');
-      if (!RegExp(r'^\+?[1-9]\d{1,14}$').hasMatch(state.phoneNumber)) {
-        throw Exception('Invalid phone number format');
-      }
+
 
 
       print('Creating car document with ID: ${carRef.id}');
