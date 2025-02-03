@@ -149,7 +149,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                   child: Text(
                     '${widget.carData['carMake']} ${widget.carData['carModel']} (${widget.carData['year']})',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                          fontSize: Dimensions.FONT_SIZE_LARGE.sp,
                           color: ColorResources.BLACK_COLOR,
                         ),
                   ),
@@ -168,7 +168,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                   child: Text(
                     'Price: Rs. ${widget.carData['price']}',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                      fontSize: Dimensions.FONT_SIZE_LARGE.sp,
                       color: ColorResources.BLACK_COLOR,
                     ),
                   ),
@@ -200,6 +200,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                   children: [
                     _buildFeature(
                       icon: Icons.speed,
+
                       label: '${widget.carData['mileage']} km',
                     ),
                     _buildFeature(
@@ -237,7 +238,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                 Center(
                   child: Text(
                     widget.carData['showroomName'] ?? 'N/A',  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                    fontSize: Dimensions.FONT_SIZE_LARGE.sp,
                     color: ColorResources.BLACK_COLOR,
                   ),
                   ),
@@ -256,7 +257,7 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                   child: Text(
                     widget.carData['location'] ?? 'N/A',
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontSize: Dimensions.FONT_SIZE_EXTRA_LARGE.sp,
+                      fontSize: Dimensions.FONT_SIZE_LARGE.sp,
                       color: ColorResources.BLACK_COLOR,
                     ),
                   ),

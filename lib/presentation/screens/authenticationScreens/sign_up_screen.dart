@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cardealershipapp/helper/extension/strings_extensions.dart';
 import 'package:cardealershipapp/presentation/routes/routes_name.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import '../../../businessLogic/bloc/signUpScreenBloc/sign_up_screen_bloc.dart';
 import '../../../helper/constants/colors_resource.dart';
@@ -279,6 +281,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   );
                                 } else if (state.isSubmitted) {
+
+                                  showTopSnackBar(
+                                    Overlay.of(context),
+                                    CustomSnackBar.success(
+                                      message: "Registered successfully!",
+                                    ),
+                                  );
                                   Navigator.pushNamedAndRemoveUntil(
                                     context,
                                     RoutesName.DASHBOARD_SCREEN,
@@ -286,9 +295,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   );
                                 } else if (state.submissionFailed) {
                                   Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(state.errorMessage),
+
+                                  showTopSnackBar(
+                                    Overlay.of(context),
+                                    CustomSnackBar.error(
+                                      message:state.errorMessage,
                                     ),
                                   );
                                 }

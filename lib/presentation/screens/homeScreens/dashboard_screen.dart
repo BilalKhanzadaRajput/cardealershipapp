@@ -297,7 +297,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                 Text(
                                                   '${carData['carMake']} ${carData['carModel']} ${carData['year']}',
                                                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                                    fontSize: Dimensions.FONT_SIZE_MEDIUM.sp,
+                                                    fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,
                                                     color: ColorResources.BLACK_COLOR,
                                                   ),
                                                   maxLines: 1,
@@ -308,7 +308,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                 Text(
                                                   'Price: Rs. ${carData['price']}',
                                                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                                    fontSize: Dimensions.FONT_SIZE_SMALL.sp,
+                                                    fontSize: Dimensions.FONT_SIZE_EXTRA_SMALL.sp,
                                                     color: ColorResources.PRIMARY_COLOR,
                                                   ),
                                                 ),
